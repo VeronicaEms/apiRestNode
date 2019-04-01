@@ -2,27 +2,36 @@ const http = require('http');
 const morgan = require('morgan');
 const express = require('express');
 const webServerConfig = require('../config/web-server.js');
+const router = require('./router.js');
  
 let httpServer;
- 
+
+/*A função retorna imediatamente uma promessa que é resolvida ou rejeitada,
+ dependendo se o servidor da Web foi iniciado com êxito.*/
+
 function initialize() {
   return new Promise((resolve, reject) => {
+    /*Um novo aplicativo expresso é criado (o que é realmente apenas uma função) 
+     e usado para criar um servidor http através do módulo http. */
     const app = express();
     httpServer = http.createServer(app);
  
     
-     // Combines logging info from request and response
+    /*
+    Morgan é um dos melhores registros em log HTTP. 
+    */
      app.use(morgan('combined'));
  
-     // *** app.get call below this line ***
-
-    app.get('/', (req, res) => {
-      res.end('Hello World!');
-    });
+     
+     /* Montar o roteador em api, todas as rotas começam com api
+     Isso significa que o URL completo para o terminal dos funcionários será:
+     http: // server: port / api / employees /: id . */
+     app.use('/api', router);
  
-    httpServer.listen(webServerConfig.port)
-      .on('listening', () => {
-        console.log(`Web server listening on localhost:${webServerConfig.port}`);
+
+     httpServer.listen(webServerConfig.port)
+     .on('listening', () => {
+       console.log(`Web server listening on localhost:${webServerConfig.port}`);
  
         resolve();
       })
@@ -34,8 +43,13 @@ function initialize() {
  
 module.exports.initialize = initialize;
 
-// *** previous code above this line ***
- 
+
+ /*
+ A função close retorna uma promessa que é resolvida quando o servidor da web é fechado com sucesso.
+O método httpServer.close impede que novas conexões sejam estabelecidas, mas não forçará as conexões já abertas a serem fechadas.
+Como o http-shutdown , para forçar a abertura de conexões fechadas.
+*/
+
 function close() {
   return new Promise((resolve, reject) => {
     httpServer.close((err) => {
@@ -50,3 +64,4 @@ function close() {
 }
  
 module.exports.close = close;
+module.exports.initialize = initialize;
