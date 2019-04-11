@@ -1,9 +1,11 @@
 const http = require('http');
 const morgan = require('morgan');
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require("body-parser");
 const webServerConfig = require('../config/web-server.js');
 const router = require('./router.js');
- 
+
 let httpServer;
 
 /*A função retorna imediatamente uma promessa que é resolvida ou rejeitada,
@@ -17,12 +19,19 @@ function initialize() {
     httpServer = http.createServer(app);
  
     
+    app.use(cors({
+      'origin': '*',
+      'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE'
+    }));
+
     /*
     Morgan é um dos melhores registros em log HTTP. 
     */
      app.use(morgan('combined'));
- 
-     
+
+     app.use(bodyParser.json());
+     app.use(bodyParser.urlencoded({ extended: true }));
+    
      /* Montar o roteador em api, todas as rotas começam com api
      Isso significa que o URL completo para o terminal dos funcionários será:
      http: // server: port / api / employees /: id . */
@@ -64,4 +73,3 @@ function close() {
 }
  
 module.exports.close = close;
-module.exports.initialize = initialize;
