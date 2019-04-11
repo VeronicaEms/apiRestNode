@@ -35,6 +35,43 @@ O objeto req.params é apenas uma das várias propriedades usadas para obter dad
     next(err);
   }
 }
- 
 
 module.exports.get = get;
+ 
+/*Criando com pedidos post
+Solicitações HTTP POST são usadas para criar novos registros (neste caso). 
+A função getEmployeeFromRec aceita um objeto de solicitação e retorna um objeto
+com as propriedades necessárias para criar um registro.
+A função foi declarada fora da função post para que possa ser usada posteriormente para solicitações PUT.*/
+
+
+function getEmployeeFromRec(req) {
+  const employee = {
+  //  id_pessoa: req.body.id_pessoa,
+    nome: req.body.nome,
+    apelido: req.body.apelido
+  };
+return employee;
+}
+
+
+/*A função post usa getEmployeeFromRec para inicializar uma variável
+que é então passada para o método de criação da API do banco de dados */
+
+
+async function post(req, res, next) {
+ 
+try {
+  let employee = getEmployeeFromRec(req);
+  console.log(employee);
+  employee = await employees.create(employee);
+
+/*Após a operação de criação, um código de status “201 Created”,
+juntamente com o JSON da pessoa (incluindo o novo valor de ID da pessoa), é enviado ao cliente.*/
+ res.status(201).json(employee);
+  } catch (err) {
+    next(err);
+  }
+  }
+
+module.exports.post = post;
