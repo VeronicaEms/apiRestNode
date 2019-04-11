@@ -1,8 +1,6 @@
 const webServer = require('./services/web-server.js');
-
-
-//  *** line that requires services/web-server.js is here ***
 const database = require('./services/database.js');
+const dbConfig = require('./config/database.js');
 
  
 /* O módulo principal traz o módulo do servidor da web e, em seguida,
@@ -16,16 +14,6 @@ caso contrário, quaisquer exceções serão capturadas e tratadas
 async function startup() {
   console.log('Starting application');
 
-  try {
-    console.log('Initializing web server module');
- 
-    await webServer.initialize();
-  } catch (err) {
-    console.error(err);
- 
-    process.exit(1); // Non-zero failure code
-  }
-  
  
   try {
     console.log('Initializing database module');
@@ -36,6 +24,17 @@ async function startup() {
  
     process.exit(1); // Non-zero failure code
   }
+
+  try {
+    console.log('Initializing web server module');
+ 
+    await webServer.initialize();
+  } catch (err) {
+    console.error(err);
+ 
+    process.exit(1); // Non-zero failure code
+  }
+  
 }
  
 startup();
@@ -47,14 +46,24 @@ async function shutdown(e) {
   let err = e;
     
   console.log('Shutting down');
+
+  try {
+    console.log('Closing web server module');
+
+    await webServer.close();
+  } catch (e) {
+    console.error(e);
+
+    err = err || e;
+  }
  
   try {
     console.log('Closing database module');
- 
-    await database.close(); 
-  } catch (err) {
-    console.log('Encountered error', e);
- 
+
+    await database.close();
+  } catch (e) {
+    console.error(e);
+
     err = err || e;
   }
  
