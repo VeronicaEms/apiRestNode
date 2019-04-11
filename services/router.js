@@ -10,6 +10,9 @@ A rota retornada da rota possui métodos que correspondem aos métodos HTTP e pe
 */
 
 router.route('/employees/:id?')
-.get(employees.get);
+.get(employees.get)
+.post(employees.post)
+//.put(employees.put)
+//.delete(employees.delete);
  
 module.exports = router;
