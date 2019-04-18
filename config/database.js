@@ -5,6 +5,7 @@ module.exports = {
   connectString: "(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = amzp.***.com.br)(PORT = ***))) (CONNECT_DATA = (SERVICE_NAME = ***)))",
   poolMin: 10,
   poolMax: 10,
-  poolIncrement: 0
+  poolIncrement: 0,
+  secret: '***'
   }
 };
