@@ -1,7 +1,8 @@
 const express = require('express');
 const router = new express.Router();
 const employees = require('../controllers/employees.js');
- 
+const login = require('../controllers/login.js');
+
 /*
 O módulo roteador inicia trazendo Express e, em seguida, cria uma nova instância da classe Express Router.
 O método de roteamento do roteador é usado para definir uma rota com base no caminho de rota passado.
@@ -14,5 +15,8 @@ router.route('/employees/:id?')
 .post(employees.post)
 //.put(employees.put)
 //.delete(employees.delete);
+
+router.route("/login/")
+.post(login.post); 
  
 module.exports = router;
