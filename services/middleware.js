@@ -7,10 +7,12 @@ bearer autenticação, pois ele trafega um token
 slice pega a string apartir da posição especifica
 */
 let checkToken = (req, res, next) => {
-  let token = req.headers['x-access-token'] || req.headers['authorization'];
+const token = req.header('Authorization').replace("Bearer ", '');
+  /*let token = req.headers['x-access-token'] || req.headers['authorization'];
   if (token.startsWith('Bearer')) {
     token = token.slice(7, token.length);
-  }
+  }*/
+
 
   if (token) {
     jwt.verify(token, config.secret, (err, decoded) => {
