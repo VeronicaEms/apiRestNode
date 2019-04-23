@@ -2,6 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const employees = require('../controllers/employees.js');
 const login = require('../controllers/login.js');
+const middleware = require('./middleware.js');
 
 /*
 O módulo roteador inicia trazendo Express e, em seguida, cria uma nova instância da classe Express Router.
@@ -12,7 +13,7 @@ A rota retornada da rota possui métodos que correspondem aos métodos HTTP e pe
 
 router.route('/employees/:id?')
 .get(employees.get)
-.post(employees.post)
+.post(middleware.checkToken, employees.post)
 //.put(employees.put)
 //.delete(employees.delete);
 
