@@ -1,6 +1,7 @@
 const employees = require('../db_apis/employees.js'); // a api do banco de dados
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
+
 /* Uma função assíncrona chamada get é declarada. Um bloco try-catch
 é usado no corpo da função para capturar exceções lançadas
 no thread principal e passá-las para a próxima função. 
@@ -15,29 +16,28 @@ O objeto req.params é apenas uma das várias propriedades usadas para obter dad
 
  async function get(req, res, next) {
   try {
-    const context = {};
- 
-    context.id = parseInt(req.params.id, 10);
-
-    const rows = await employees.find(context);
-    
- 
+    let rows = "";
     if (req.params.id) {
-      if (rows.length === 1) {
-        res.status(200).json(rows[0]);
-      } else {
-        res.status(404).end();
-      }
+      id = parseInt(req.params.id, 10);
+      console.log(`>>> ID_PESSOA: '${id}'`);
+      rows = await employees.findOne(id);
     } else {
+      rows = await employees.getAll();
+    }
+    console.log(`>>> RESULT:`, rows);
+
+    if (rows.length > 0) {
       res.status(200).json(rows);
+    } else {
+      res.status(404).end();
     }
   } catch (err) {
     next(err);
   }
 }
-
 module.exports.get = get;
  
+
 /*Criando com pedidos post
 Solicitações HTTP POST são usadas para criar novos registros (neste caso). 
 A função getEmployeeFromRec aceita um objeto de solicitação e retorna um objeto
@@ -53,14 +53,11 @@ function getEmployeeFromRec(req) {
 return employee;
 }
 
-
-
 /*A função post usa getEmployeeFromRec para inicializar uma variável
 que é então passada para o método de criação da API do banco de dados */
 
 async function post(req, res, next) {
- 
-try {
+ try {
   let employee = getEmployeeFromRec(req);
   console.log(employee);
   employee = await employees.create(employee);
@@ -73,3 +70,26 @@ juntamente com o JSON da pessoa (incluindo o novo valor de ID da pessoa), é env
   }}
 
 module.exports.post = post;
+
+
+async function put(req, res, next) {
+    try {
+      const updateFields = {
+        id_pessoa: req.body.id_pessoa,
+        nome: req.body.nome,
+        apelido: req.body.apelido,
+        email: req.body.email
+      };
+      const changedRows = await employees.putAll(updateFields);
+      if (changedRows > 0) {
+        res.status(200).json({ status: 200, changedRows: changedRows });
+      } else {
+        res.status(404).end();
+      }
+    } catch (err) {
+      next(err);
+    }
+  }
+module.exports.put = put;
+
+
