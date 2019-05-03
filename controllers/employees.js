@@ -25,12 +25,16 @@ O objeto req.params é apenas uma das várias propriedades usadas para obter dad
       rows = await employees.getAll();
     }
     console.log(`>>> RESULT:`, rows);
+    //console.log(`>>>QUANTIDADE:`, rows.rows.length);
 
     if (rows.length > 0) {
       res.status(200).json(rows);
-    } else {
+    } else if (rows.rows.length > 0){
+      res.status(200).json(rows.rows);
+    }else {
       res.status(404).end();
-    }
+    } 
+
   } catch (err) {
     next(err);
   }
@@ -91,5 +95,6 @@ async function put(req, res, next) {
     }
   }
 module.exports.put = put;
+
 
 
