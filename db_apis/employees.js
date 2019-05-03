@@ -81,9 +81,11 @@ async function findOne(id) {
   const binds = {};
 
   if (id) {
-    query += ` where id_pessoa = ${id}`;
+    binds.id_pessoa = id;
+    /* query += ` where id_pessoa = ${id}`; */
+    query += `\n where id_pessoa = :id_pessoa`;
   }
-  const result = await database.simpleExecute(query, binds);
+  const result = await database.simpleExecute(query,binds);
   return result;
 }
 
