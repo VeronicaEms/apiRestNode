@@ -76,6 +76,18 @@ module.exports.putAll = putAll;
 
 
 
+async function removeOne( binds) {
+  console.log(req.body.id_pessoa)
+  const removeQuery = `DELETE from rjs_pessoa WHERE id_pessoa = :id_pessoa`;
+  console.log("> DELETE:", removeQuery);
+  const result = await database.simpleExecute(removeQuery, binds);
+  console.log("> RESULT:", result.rowsAffected);
+  return result.rowsAffected;
+}
+module.exports.removeOne = removeOne;
+
+
+
 async function findOne(id) {
   let query = `select id_pessoa, nome, apelido, email from rjs_pessoa`;
   const binds = {};
