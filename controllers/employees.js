@@ -97,4 +97,20 @@ async function put(req, res, next) {
 module.exports.put = put;
 
 
+async function remove(req, res, next) {
+try {
+  const removeFields = {
+    id_pessoa: req.body.id_pessoa
+  };
+  const changedRows = await employees.removeOne(removeFields);
+  if (changedRows > 0) {
+    res.status(200).json({ status: 200, changedRows: changedRows });
+  } else {
+    res.status(404).end();
+  }
+} catch (err) {
+  next(err);
+  }
+}
+module.exports.remove = remove;
 
