@@ -48,12 +48,9 @@ values (srjs_pessoa.nextval, :nome, :apelido, :email, :password) returning id_pe
 
 
    const result = await database.simpleExecute(createSql, employee);
-   //employee = result.outbinds.employee[0];
-   //return employee;
    return result;
  }
-
- module.exports.create = create;
+module.exports.create = create;
 
  
  async function getAll() {
@@ -67,25 +64,21 @@ module.exports.getAll = getAll;
 //Essa função edita os dados da tabela do frontend
 async function putAll(binds) {
   const updateQuery = `UPDATE rjs_pessoa SET nome = :nome, apelido = :apelido, email = :email WHERE id_pessoa = :id_pessoa`;
-  console.log("> UPDATE:", updateQuery);
   const result = await database.simpleExecute(updateQuery, binds);
-  console.log("> RESULT:", result.rowsAffected);
   return result.rowsAffected;
 }
 module.exports.putAll = putAll;
 
 
-
-async function removeOne( binds) {
-  console.log(req.body.id_pessoa)
-  const removeQuery = `DELETE from rjs_pessoa WHERE id_pessoa = :id_pessoa`;
+async function removeOne(binds) {
+  console.log('>>> REMOVEONE()', binds.id_pessoa) 
+  const removeQuery = `DELETE FROM rjs_pessoa WHERE id_pessoa = :id_pessoa`;
   console.log("> DELETE:", removeQuery);
   const result = await database.simpleExecute(removeQuery, binds);
   console.log("> RESULT:", result.rowsAffected);
   return result.rowsAffected;
 }
 module.exports.removeOne = removeOne;
-
 
 
 async function findOne(id) {
