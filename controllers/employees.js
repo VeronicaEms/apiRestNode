@@ -21,7 +21,7 @@ O objeto req.params é apenas uma das várias propriedades usadas para obter dad
       id = parseInt(req.params.id, 10);
       rows = await employees.findOne(id);
     } else {
-      rows = await employees.getAll();
+      rows = await employees.getAll(req);
     }
     if (rows.length > 0) {
       res.status(200).json(rows);
