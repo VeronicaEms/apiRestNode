@@ -53,11 +53,13 @@ values (srjs_pessoa.nextval, :nome, :apelido, :email, :password) returning id_pe
 module.exports.create = create;
 
  
- async function getAll() {
-  const query = `select id_pessoa, nome, apelido, email from rjs_pessoa`;
- const result = await database.simpleExecute(query,{});
- return result.rows;
-} 
+async function getAll(req) {
+  const { email } = req.query
+  console.log(`>>>>>>>>>>AQUI:`, req.query);
+  const query = `select id_pessoa, nome, apelido, email from rjs_pessoa ${email ? ` where email like ${email}` : null}`;
+  const result = await database.simpleExecute(query,{});
+  return result.rows;
+}
 module.exports.getAll = getAll;
 
 
@@ -93,5 +95,7 @@ async function findOne(id) {
   const result = await database.simpleExecute(query,binds);
   return result;
 }
+
+module.exports.findOne = findOne;
 
 module.exports.findOne = findOne;
