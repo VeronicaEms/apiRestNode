@@ -21,7 +21,7 @@ O objeto req.params é apenas uma das várias propriedades usadas para obter dad
       id = parseInt(req.params.id, 10);
       rows = await employees.findOne(id);
     } else {
-      rows = await employees.getAll(req);
+      rows = await employees.getAll();
     }
     if (rows.length > 0) {
       res.status(200).json(rows);
@@ -93,20 +93,6 @@ async function put(req, res, next) {
 module.exports.put = put;
 
 
-/*async function remove(req, res, next) {
-  try {
-    const rowsAffected = await employees.removeOne(req.body);
-    if (rowsAffected > 0) {
-      res.status(200).json({ status: 200, rowsAffected: rowsAffected });
-    } else {
-      res.status(404).end();
-    }
-  } catch (err) {
-    next(err);
-    }
-  }
-  module.exports.remove = remove;*/
-
   async function remove(req, res, next) {
     try {
       console.log(">>> CTRLLS REMOVE() ", req.params.id);
@@ -123,3 +109,25 @@ module.exports.put = put;
     }
   }
   module.exports.remove = remove;
+
+  async function email(req, res, next) {
+    try {
+      let rows = "";
+      if (req.params.email) {
+        email = req.params.email;
+        console.log(`>>> EMAIL: '${email}'`);
+        rows = await employees.searchEmail(email);
+        console.log(`>>> RESULT:`, rows);
+      }
+  
+      if (rows.length > 0) {
+        res.status(200).json(rows);
+      } else {
+        res.status(404).end();
+      }
+    } catch (err) {
+      next(err);
+    }
+  }
+  
+  module.exports.email = email;
