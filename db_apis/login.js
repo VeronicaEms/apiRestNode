@@ -9,7 +9,9 @@ async function find(context) {
 
   if (context.email && context.password) {
     binds.email = context.email;
+    //binds.password = context.password;
     query += `\n WHERE email = :email`;
+    //query += `\n WHERE email = :email AND password =:password`;
   }
 
   console.log("QUERY SQL:", query, binds);
@@ -33,7 +35,6 @@ async function find(context) {
     // se forem iguais o "compare" retornará TRUE e retornará o ID_PESSOA para o controllers.
     // se as senhas não forem iguais o "compare" retorna FALSE, nesse caso o find retornará -1
     // para o controllers indicando que a senha não confere
-
     if (await bcrypt.compare(context.password, hashpasswd)) {
       console.log("db_apis - RESULT SQL:", id_pessoa);
 
