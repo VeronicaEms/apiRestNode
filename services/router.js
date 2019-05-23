@@ -17,6 +17,9 @@ router.route('/employees/:id?')
 .put(employees.put)
 .delete(employees.remove);
 
+router.route("/employees/search/:email?")
+.get(employees.email);
+
 router.route("/login/")
 .post(login.post); 
  
