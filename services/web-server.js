@@ -5,7 +5,7 @@ const cors = require('cors');
 const bodyParser = require("body-parser");
 const webServerConfig = require('../config/web-server.js');
 const router = require('./router.js');
-
+ 
 let httpServer;
 
 /*A função retorna imediatamente uma promessa que é resolvida ou rejeitada,
@@ -29,8 +29,10 @@ function initialize() {
     */
      app.use(morgan('combined'));
 
+
+     //Código que será responsável para realizar a conversão dos nosso dados para JSON.
      app.use(bodyParser.json());
-     app.use(bodyParser.urlencoded({ extended: true }));
+     app.use(bodyParser.urlencoded({ extended: false }));
     
      /* Montar o roteador em api, todas as rotas começam com api
      Isso significa que o URL completo para o terminal dos funcionários será:
