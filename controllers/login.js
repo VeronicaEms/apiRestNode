@@ -1,14 +1,14 @@
 const userdb = require("../db_apis/login.js"); // a api do banco de dados
 const jwt = require("jsonwebtoken");
 const config = require("../config/database.js");
-//const bcrypt = require('bcryptjs');
-//const salt = bcrypt.genSaltSync(10);
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
 //A function abaixo cria um object array com dois elementos: o user e o pass que vem do req.body
 function getUserPassFromRequest(req) {
   return {
     email: req.body.email,
-    //password: bcrypt.hashSync(req.body.password, salt)
-    password: req.body.password
+    password: bcrypt.hashSync(req.body.password, salt)
+    //password: req.body.password
   };
 
 }
@@ -58,3 +58,5 @@ console.log("TOKEN:", token);
 }
 
 module.exports.post = post;
+
+
