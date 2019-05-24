@@ -98,7 +98,7 @@ module.exports.findOne = findOne;
 
 
 async function searchEmail(email) {
-  const query = `select id_pessoa, nome, apelido, email from rjs_pessoa where email like :email`;
+  const query = `select id_pessoa, nome, apelido, email from rjs_pessoa where lower(email) like lower(:email)`;
   console.log(">>> SQL:", query);
   const result = await database.simpleExecute(query, { email });
   console.log(result.rows);
