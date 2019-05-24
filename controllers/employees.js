@@ -48,6 +48,7 @@ function getEmployeeFromRec(req) {
     nome: req.body.nome,
     apelido: req.body.apelido,
     email: req.body.email,
+    //password: req.body.password
     password: bcrypt.hashSync(req.body.password, salt)
   }
 return employee;
